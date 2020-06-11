@@ -1941,8 +1941,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    // I have a property data which is a function
+    return {
+      // this property data returns an object (here tasks)
+      tasks: {} // tasks here is also an object with many informations in it, I can access to it in my vuejs component by doing this.tasks in my below axios response
+
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    // it is a function we use when we want to make calls to the db, with axios for example
+    axios.get('http://laravue.test/tasksList') // when I call with axios this url
+    .then(function (response) {
+      return _this.tasks = response.data;
+    }) // I can stock my data in the tasks object in above data() by doing what's on the left
+    ["catch"](function (error) {
+      return console.log(error);
+    });
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
   }
@@ -37526,34 +37545,20 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("ul", { staticClass: "list-group" }, [
-        _c("li", { staticClass: "list-group-item" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Tâches 1 ")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "list-group-item" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Tâches 2 ")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "list-group-item" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Tâches 3 ")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "list-group-item" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Tâches 4 ")])
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "ul",
+      { staticClass: "list-group" },
+      _vm._l(_vm.tasks, function(task) {
+        return _c("li", { key: task.id, staticClass: "list-group-item" }, [
+          _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(task.name))])
         ])
-      ])
-    ])
-  }
-]
+      }),
+      0
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
