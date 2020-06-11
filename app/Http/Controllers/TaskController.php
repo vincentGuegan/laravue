@@ -37,7 +37,13 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $task = Task::create($request->all()); // This enables Laravel to fulfill the information, but I have to precise in my task model what exactely I authorized (it will be the name)
+    
+        if ($task) { // if task, it will refresh directly my task list by a json response which will have the task that I just added
+            $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
+
+            return response()->json($tasks); 
+        }
     }
 
     /**

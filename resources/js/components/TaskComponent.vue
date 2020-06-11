@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+            <add-task @task-added="refresh"></add-task>
             <ul class="list-group">
                 <li class="list-group-item" v-for="task in tasks.data" :key="task.id"> <!-- Add of .data to link the pagination library -->
                     <a href="#">{{ task.name }}</a>
@@ -23,15 +24,21 @@
                 .then(response => this.tasks = response.data) // I can stock my data in the tasks object in above data() by doing what's on the left
                 .catch(error => console.log(error));
         },
+
         methods: {
-        // Our method to GET results from a Laravel endpoint
-        getResults(page = 1) {
-            axios.get('http://laravue.test/tasksList?page=' + page)
-                .then(response => {
-                    this.tasks = response.data;
-                });
+            // Our method to GET results from a Laravel endpoint
+            getResults(page = 1) {
+                axios.get('http://laravue.test/tasksList?page=' + page)
+                    .then(response => {
+                        this.tasks = response.data;
+                    });
+            },
+
+            refresh(tasks) {
+                this.tasks = tasks.data // I take the actual data and replace them by the latest tasks
             }
         },
+
         mounted() {
             console.log('Component mounted.')
         }

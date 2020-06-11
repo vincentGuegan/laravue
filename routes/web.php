@@ -18,5 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/tasksList', 'TaskController@index'); // to call the route with axios
+Route::post('/tasksList', 'TaskController@store'); // to call the route with axios for modification
+
 
 
