@@ -1,10 +1,11 @@
 <template>
     <div class="container">
             <ul class="list-group">
-                <li class="list-group-item" v-for="task in tasks" :key="task.id">
+                <li class="list-group-item" v-for="task in tasks.data" :key="task.id"> <!-- Add of .data to link the pagination library -->
                     <a href="#">{{ task.name }}</a>
                 </li>
             </ul>
+            <pagination :data="tasks" @pagination-change-page="getResults" class="mt-5"></pagination>
     </div>
 </template>
 
@@ -21,6 +22,15 @@
             axios.get('http://laravue.test/tasksList') // when I call with axios this url
                 .then(response => this.tasks = response.data) // I can stock my data in the tasks object in above data() by doing what's on the left
                 .catch(error => console.log(error));
+        },
+        methods: {
+        // Our method to GET results from a Laravel endpoint
+        getResults(page = 1) {
+            axios.get('http://laravue.test/tasksList?page=' + page)
+                .then(response => {
+                    this.tasks = response.data;
+                });
+            }
         },
         mounted() {
             console.log('Component mounted.')
