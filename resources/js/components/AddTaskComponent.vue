@@ -26,7 +26,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-success" @click="taskStore">Créer ma tâche</button>
+                <button type="submit" class="btn btn-success" @click="taskStore"
+                data-dismiss="modal">Créer ma tâche</button>
             </div>
             </div>
         </div>

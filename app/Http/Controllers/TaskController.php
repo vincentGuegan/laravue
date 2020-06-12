@@ -40,9 +40,7 @@ class TaskController extends Controller
         $task = Task::create($request->all()); // This enables Laravel to fulfill the information, but I have to precise in my task model what exactely I authorized (it will be the name)
     
         if ($task) { // if task, it will refresh directly my task list by a json response which will have the task that I just added
-            $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
-
-            return response()->json($tasks); 
+            return $this->refresh(); // refresh() is a private function (at the bottom) because the code is the same for the function store and the function update
         }
     }
 
@@ -76,9 +74,15 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        //
+        $task = Task::find($id); // find by id
+        $task->name = request('name'); // the name is what I refind in my request
+        $task->save(); // I persist it in database with the function save()
+            
+        if($task) {
+            return $this->refresh(); // refresh() is a private function (at the bottom) because the code is the same for the function store and the function update
+        }
     }
 
     /**
@@ -90,5 +94,11 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function refresh()
+    {
+        $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
+        return response()->json($tasks);
     }
 }

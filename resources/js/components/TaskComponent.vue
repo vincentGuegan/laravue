@@ -10,7 +10,7 @@
                         Editer
                     </button>
                 </li>
-                <edit-task v-bind:taskToEdit="taskToEdit"></edit-task>
+                <edit-task v-bind:taskToEdit="taskToEdit" @task-updated="refresh"></edit-task>
             </ul>
             <pagination :data="tasks" @pagination-change-page="getResults" class="mt-5"></pagination>
     </div>
@@ -43,7 +43,7 @@
 
             getTask(id) {
                 axios.get('http://laravue.test/tasks/edit/' + id) // this task will call a route in route/web.php
-                    .then(response => this.taskToEdit = response.data.name) // the response will be equal to the data we got back, that is to say the concerned name of the task
+                    .then(response => this.taskToEdit = response.data) // the response will be equal to the data we got back, that is to say the concerned data of the task
                     .catch(error => console.log(error));
             },
 
