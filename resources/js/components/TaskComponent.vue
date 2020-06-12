@@ -5,10 +5,16 @@
                 <li class="list-group-item d-flex justify-content-between aligns-items-center"
                 v-for="task in tasks.data" :key="task.id"> <!-- Add of .data to link the pagination library -->
                     <a href="#">{{ task.name }}</a>
-                    <button type="button" class="btn btn-secondary my-3" data-toggle="modal"
-                    data-target="#editModal" @click="getTask(task.id)">
-                        Editer
-                    </button>
+                        <div>
+                            <button type="button" class="btn btn-secondary my-3" data-toggle="modal"
+                            data-target="#editModal" @click="getTask(task.id)">
+                                Editer
+                            </button>
+                            <button type="button" class="btn btn-danger"
+                            @click="deleteTask(task.id)">
+                                Supprimer
+                            </button>
+                        </div>
                 </li>
                 <edit-task v-bind:taskToEdit="taskToEdit" @task-updated="refresh"></edit-task>
             </ul>
@@ -44,6 +50,12 @@
             getTask(id) {
                 axios.get('http://laravue.test/tasks/edit/' + id) // this task will call a route in route/web.php
                     .then(response => this.taskToEdit = response.data) // the response will be equal to the data we got back, that is to say the concerned data of the task
+                    .catch(error => console.log(error));
+            },
+
+            deleteTask(id) {
+                axios.delete('http://laravue.test/tasks/' + id) // this task will call a route in route/web.php
+                    .then(response => this.tasks = response.data) 
                     .catch(error => console.log(error));
             },
 
