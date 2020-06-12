@@ -2,9 +2,15 @@
     <div class="container">
             <add-task @task-added="refresh"></add-task>
             <ul class="list-group">
-                <li class="list-group-item" v-for="task in tasks.data" :key="task.id"> <!-- Add of .data to link the pagination library -->
+                <li class="list-group-item d-flex justify-content-between aligns-items-center"
+                v-for="task in tasks.data" :key="task.id"> <!-- Add of .data to link the pagination library -->
                     <a href="#">{{ task.name }}</a>
+                    <button type="button" class="btn btn-secondary my-3" data-toggle="modal"
+                    data-target="#editModal" @click="getTask(task.id)">
+                        Editer
+                    </button>
                 </li>
+                <edit-task v-bind:taskToEdit="taskToEdit"></edit-task>
             </ul>
             <pagination :data="tasks" @pagination-change-page="getResults" class="mt-5"></pagination>
     </div>
@@ -15,8 +21,9 @@
 
         data() { // I have a property data which is a function
             return { // this property data returns an object (here tasks)
-                tasks: {} // tasks here is also an object with many informations in it, I can access to it in my vuejs component by doing this.tasks in my below axios response
-            }
+                tasks: {}, // tasks here is also an object with many informations in it, I can access to it in my vuejs component by doing this.tasks in my below axios response
+                taskToEdit: ''
+           }
         },
 
         created() { // it is a function we use when we want to make calls to the db, with axios for example
@@ -32,6 +39,12 @@
                     .then(response => {
                         this.tasks = response.data;
                     });
+            },
+
+            getTask(id) {
+                axios.get('http://laravue.test/tasks/edit/' + id) // this task will call a route in route/web.php
+                    .then(response => this.taskToEdit = response.data.name) // the response will be equal to the data we got back, that is to say the concerned name of the task
+                    .catch(error => console.log(error));
             },
 
             refresh(tasks) {

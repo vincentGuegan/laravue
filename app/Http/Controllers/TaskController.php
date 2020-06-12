@@ -63,9 +63,10 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id) // to get back by id
     {
-        //
+        $task = Task::find($id);  // find by id
+            return response()->json($task);
     }
 
     /**
