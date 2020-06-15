@@ -14,9 +14,12 @@ class TaskController extends Controller
      */
     public function index() // this index function is going to get the tasks information in the db and resend them under json format
     {
-        $tasks = Task::orderBy('created_at', 'DESC')->paginate(3); // to get a choose number of task per page, ordered from the oldest to the newest
-
-        return response()->json($tasks); // return task info in json format
+        if (request('q') != null) {
+            $tasks['data'] = Task::where('name', 'like', '%' . request('q') . '%')->get();
+            return response()->json($tasks);
+        } else {
+            return $this->refresh();
+        }
     }
 
     /**

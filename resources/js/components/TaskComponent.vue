@@ -1,5 +1,11 @@
 <template>
     <div class="container">
+            <div class="form-row">
+                <div class="col-row">
+                    <input type="text" class="form-control" @keyup="searchTask" v-model="q"
+                    placeholder="Rechercher une tâche...">
+                </div>
+            </div>
             <add-task @task-added="refresh"></add-task>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between aligns-items-center"
@@ -28,7 +34,8 @@
         data() { // I have a property data which is a function
             return { // this property data returns an object (here tasks)
                 tasks: {}, // tasks here is also an object with many informations in it, I can access to it in my vuejs component by doing this.tasks in my below axios response
-                taskToEdit: ''
+                taskToEdit: '',
+                q: ''
            }
         },
 
@@ -57,6 +64,18 @@
                 axios.delete('http://laravue.test/tasks/' + id) // this task will call a route in route/web.php
                     .then(response => this.tasks = response.data) 
                     .catch(error => console.log(error));
+            },
+
+            searchTask() {
+                if (this.q.length > 3) {
+                    axios.get('http://laravue.test/tasksList/' + this.q)
+                        .then(response => this.tasks = response.data)
+                        .catch(error => console.log(error));
+                } else {
+                    axios.get('http://laravue.test/tasksList')
+                        .then(response => this.tasks = response.data)
+                        .catch(error => console.log(error));
+                }
             },
 
             refresh(tasks) {
